@@ -16,6 +16,7 @@ import com.badlogic.gdx.math.Interpolation;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.utils.ScreenUtils;
 import com.badlogic.gdx.utils.viewport.FitViewport;
+
 import de.eskalon.commons.core.ManagedGame;
 import de.eskalon.commons.screen.ManagedScreen;
 import de.eskalon.commons.screen.transition.ScreenTransition;
@@ -57,7 +58,6 @@ public class GameMain extends ManagedGame<ManagedScreen, ScreenTransition> {
         assets.load("textures/icons.png", Texture.class);
         assets.load("textures/cards.png", Texture.class);
 
-        assets.finishLoading();
         GameAssets.initialize(assets);
 
         screenManager.setAutoDispose(true, true);

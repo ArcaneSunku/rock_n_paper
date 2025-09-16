@@ -12,6 +12,9 @@ public class GameAssets {
     private static final HashMap<String, Sprite> GAME_SPRITES = new HashMap<>();
 
     public static void initialize(AssetManager assets) {
+        if(!assets.isFinished())
+            assets.finishLoading();
+
         // Creates Sprites for our Rock, Paper, and Scissors icons
         for(int i = 0; i < 3; i++) {
             TextureRegion region = new TextureRegion(assets.get("textures/icons.png", Texture.class));

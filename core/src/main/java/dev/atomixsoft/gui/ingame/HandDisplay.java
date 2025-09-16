@@ -1,6 +1,7 @@
-package dev.atomixsoft.gui;
+package dev.atomixsoft.gui.ingame;
 
 import dev.atomixsoft.game.players.Player;
+import dev.atomixsoft.gui.GroupAdapter;
 
 public class HandDisplay extends GroupAdapter {
 

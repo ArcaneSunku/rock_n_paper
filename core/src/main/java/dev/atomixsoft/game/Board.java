@@ -17,13 +17,14 @@ public class Board {
     }
 
     public void initializeMatch(int level) {
-        if(level == VS_PLAYER && m_Players.get(1).isCPU()) {
-            System.err.println("VS_PLAYER flag enabled when there is a CPU in the game");
-            throw new IllegalStateException();
-        }
+        if(level == VS_PLAYER && m_Players.get(1).isCPU())
+            throw new IllegalStateException("VS_PLAYER flag enabled when there is a CPU in the game");
     }
 
     public void addPlayer(Player player, boolean isCPU) {
+        if(m_Players.size() >= 2)
+            throw new IllegalStateException("Can't have more than 2 Players in a Match!");
+
         player.setCPU(isCPU);
         m_Players.add(player);
     }

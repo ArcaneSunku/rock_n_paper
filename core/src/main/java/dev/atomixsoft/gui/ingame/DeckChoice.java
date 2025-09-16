@@ -1,4 +1,4 @@
-package dev.atomixsoft.gui;
+package dev.atomixsoft.gui.ingame;
 
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
@@ -13,6 +13,7 @@ import de.eskalon.commons.screen.transition.impl.BlendingTransition;
 
 import dev.atomixsoft.GameMain;
 import dev.atomixsoft.game.Card;
+import dev.atomixsoft.gui.GroupAdapter;
 import dev.atomixsoft.gui.elements.CardDisplay;
 import dev.atomixsoft.screens.TitleScreen;
 
@@ -165,6 +166,7 @@ public class DeckChoice extends GroupAdapter {
 
                 m_Pressed = true;
                 m_Confirmed = true;
+                removeFromParent();
             }
         });
 
