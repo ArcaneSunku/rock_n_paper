@@ -1,7 +1,11 @@
 package dev.atomixsoft.game;
 
+import dev.atomixsoft.game.players.Player;
+import dev.atomixsoft.game.utils.GameHandler;
+
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.concurrent.ThreadLocalRandom;
 
 
@@ -16,7 +20,7 @@ public class Deck {
     private int m_Size;
 
     public Deck() {
-        this(15);
+        this(25);
     }
 
     public Deck(int deckSize) {
@@ -28,30 +32,14 @@ public class Deck {
     }
 
     public void addCard(Card card) {
-        m_Size++;
         m_Deck.add(card);
-    }
 
-    /**
-     * <p>Reshuffles every card from our Discard pile into our Deck.</br>
-     * If the player is in a Match, it will only do this if the deck is empty.</p>
-     *
-     * @param inMatch whether a {@link Player} is in a match or not
-     */
-    public void reshuffle(boolean inMatch) {
-        if(!m_Deck.isEmpty() && inMatch) return;
-
-        do {
-            int size = m_Discard.size();
-            int selected = size <= 1 ? size : ThreadLocalRandom.current().nextInt(size + 1);
-
-            m_Deck.add(m_Discard.get(selected));
-            m_Discard.remove(selected);
-        } while(!m_Discard.isEmpty());
+        if(m_Deck.size() > m_Size)
+            m_Size = m_Deck.size();
     }
 
     public void reset() {
-        reshuffle(false);
+        GameHandler.Reshuffle(this, false);
 
         m_Deck.addAll(m_Spent);
         m_Spent.clear();
@@ -64,12 +52,31 @@ public class Deck {
         return card;
     }
 
+    public int getMaxDeckSize() {
+        return m_Size;
+    }
+
     public ArrayList<Card> getDeck() {
         return (ArrayList<Card>) m_Deck;
+    }
+
+    public ArrayList<Card> getSpent() {
+        return (ArrayList<Card>) m_Spent;
     }
 
     public ArrayList<Card> getDiscard() {
         return (ArrayList<Card>) m_Discard;
     }
 
+    @Override
+    public boolean equals(Object o) {
+        if (o == null || getClass() != o.getClass()) return false;
+        Deck deck = (Deck) o;
+        return m_Size == deck.m_Size && Objects.equals(m_Deck, deck.m_Deck) && Objects.equals(m_Discard, deck.m_Discard) && Objects.equals(m_Spent, deck.m_Spent);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(m_Deck, m_Discard, m_Spent, m_Size);
+    }
 }

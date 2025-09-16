@@ -1,4 +1,7 @@
-package dev.atomixsoft.game;
+package dev.atomixsoft.game.players;
+
+import dev.atomixsoft.game.Card;
+import dev.atomixsoft.game.Deck;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -12,12 +15,12 @@ import java.util.Objects;
  */
 public class Player {
 
-    private final List<Card> m_Hand;
+    protected final List<Card> m_Hand;
 
-    private final Deck m_Deck;
-    private final int m_MaxHandSize;
+    protected Deck m_Deck;
+    protected int m_MaxHandSize;
 
-    private boolean m_CPU;
+    protected boolean m_CPU;
 
     /**
      * Creates a {@link Player} with a maxHandSize of 5.
@@ -34,10 +37,18 @@ public class Player {
     public Player(int maxHandSize) {
         m_Hand = new ArrayList<>();
 
-        m_Deck = new Deck();
+        m_Deck = new Deck(20);
         m_MaxHandSize = maxHandSize;
 
         m_CPU = false;
+    }
+
+    public void setDeck(Deck deck) {
+        m_Deck = deck;
+    }
+
+    public void setMaxHandSize(int size) {
+        m_MaxHandSize = size;
     }
 
     public void setCPU(boolean isCPU) {
@@ -46,6 +57,10 @@ public class Player {
 
     public boolean isCPU() {
         return m_CPU;
+    }
+
+    public Deck getDeck() {
+        return m_Deck;
     }
 
     public int getMaxHandSize() {

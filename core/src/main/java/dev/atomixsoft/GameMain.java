@@ -21,6 +21,7 @@ import de.eskalon.commons.screen.ManagedScreen;
 import de.eskalon.commons.screen.transition.ScreenTransition;
 import de.eskalon.commons.screen.transition.impl.BlendingTransition;
 
+import dev.atomixsoft.game.utils.GameAssets;
 import dev.atomixsoft.screens.TitleScreen;
 
 public class GameMain extends ManagedGame<ManagedScreen, ScreenTransition> {

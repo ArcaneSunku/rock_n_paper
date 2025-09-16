@@ -1,4 +1,4 @@
-package dev.atomixsoft;
+package dev.atomixsoft.game.utils;
 
 import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.graphics.Texture;

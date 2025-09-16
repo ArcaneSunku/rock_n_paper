@@ -1,12 +1,9 @@
 package dev.atomixsoft.game;
 
-import com.badlogic.gdx.assets.AssetManager;
-import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
-import dev.atomixsoft.GameAssets;
+import dev.atomixsoft.game.utils.GameAssets;
 
 /**
  * <p>Represents a Card that is meant to be inside a Deck.</br></br>
