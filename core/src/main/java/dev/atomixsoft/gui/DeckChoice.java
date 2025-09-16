@@ -1,7 +1,5 @@
 package dev.atomixsoft.gui;
 
-import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.math.Interpolation;
@@ -11,8 +9,8 @@ import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 
 import com.github.tommyettinger.textra.*;
 
-import de.eskalon.commons.screen.transition.impl.SlidingDirection;
-import de.eskalon.commons.screen.transition.impl.SlidingInTransition;
+import de.eskalon.commons.screen.transition.impl.BlendingTransition;
+
 import dev.atomixsoft.GameMain;
 import dev.atomixsoft.game.Card;
 import dev.atomixsoft.gui.elements.CardDisplay;
@@ -22,8 +20,6 @@ import java.util.concurrent.ThreadLocalRandom;
 
 public class DeckChoice extends GroupAdapter {
 
-    private final GameMain m_Game;
-
     private Card.CardType m_Selected;
     private boolean m_Pressed = false;
 
@@ -31,36 +27,27 @@ public class DeckChoice extends GroupAdapter {
     private TextraButton m_Confirm;
     private boolean m_Confirmed;
 
-    public DeckChoice() {
-        super();
-
-        m_Game = (GameMain) Gdx.app.getApplicationListener();
+    public DeckChoice(GameMain game) {
+        super(game);
         m_Selected = null;
     }
 
     @Override
     public void update() {
-        AssetManager assets = m_Game.getAssets();
+        clearChildren();
         Card rock, paper, scissors;
 
-        Styles.TextTooltipStyle ttStyle = new Styles.TextTooltipStyle();
-        ttStyle.label = new Styles.LabelStyle(new Font(assets.get("dePixel18.ttf", BitmapFont.class)), Color.BLACK);
-
+        ThreadLocalRandom current = ThreadLocalRandom.current();
         rock = new Card(1, Card.CardType.ROCK);
         CardDisplay rockDis = CardDisplay.Card_Display(rock);
-
+        rockDis.getColor().a = 0.0f;
         int baseY = 10;
         rockDis.setPosition(32, baseY);
-        TextraTooltip ttRock = new TextraTooltip("{EASE}{WAVE}Rock Deck", ttStyle);
-        ttRock.setInstant(true);
 
-        ThreadLocalRandom current = ThreadLocalRandom.current();
-
-        rockDis.addAction(Actions.sequence(Actions.delay(current.nextFloat(1.25f)),
+        rockDis.addAction(Actions.sequence(Actions.fadeIn(1.25f), Actions.delay(current.nextFloat(1.25f)),
             Actions.forever(Actions.sequence(Actions.moveTo(rockDis.getX(), baseY + 10f, 1.0f, Interpolation.fastSlow),
             Actions.moveTo(rockDis.getX(), baseY - 10f, 1.0f, Interpolation.pow2In)))));
 
-        rockDis.addListener(ttRock);
         rockDis.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
@@ -75,15 +62,13 @@ public class DeckChoice extends GroupAdapter {
 
         paper = new Card(1, Card.CardType.PAPER);
         CardDisplay paperDis = CardDisplay.Card_Display(paper);
+        paperDis.getColor().a = 0.0f;
         paperDis.setPosition(rockDis.getX() + rockDis.getWidth() + 32, baseY);
-        TextraTooltip ttPaper = new TextraTooltip("{EASE}{WAVE}Paper Deck", ttStyle);
-        ttPaper.setInstant(true);
 
-        paperDis.addAction(Actions.sequence(Actions.delay(current.nextFloat(1.25f)),
+        paperDis.addAction(Actions.sequence(Actions.fadeIn(1.25f), Actions.delay(current.nextFloat(1.25f)),
             Actions.forever(Actions.sequence(Actions.moveTo(paperDis.getX(), baseY + 10f, 1.0f, Interpolation.fastSlow),
             Actions.moveTo(paperDis.getX(), baseY - 10f, 1.0f, Interpolation.pow2In)))));
 
-        paperDis.addListener(ttPaper);
         paperDis.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
@@ -98,15 +83,13 @@ public class DeckChoice extends GroupAdapter {
 
         scissors = new Card(1, Card.CardType.SCISSORS);
         CardDisplay scissorsDis = CardDisplay.Card_Display(scissors);
+        scissorsDis.getColor().a = 0.0f;
         scissorsDis.setPosition(paperDis.getX() + paperDis.getWidth() + 32, baseY);
-        TextraTooltip ttScissors = new TextraTooltip("{EASE}{WAVE}Scissors Deck", ttStyle);
-        ttScissors.setInstant(true);
 
-        scissorsDis.addAction(Actions.sequence(Actions.delay(current.nextFloat(1.25f)),
+        scissorsDis.addAction(Actions.sequence(Actions.fadeIn(1.25f), Actions.delay(current.nextFloat(1.25f)),
             Actions.forever(Actions.sequence(Actions.moveTo(scissorsDis.getX(), baseY + 10f, 1.0f, Interpolation.fastSlow),
             Actions.moveTo(scissorsDis.getX(), baseY - 10f, 1.0f, Interpolation.pow2In)))));
 
-        scissorsDis.addListener(ttScissors);
         scissorsDis.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
@@ -124,7 +107,7 @@ public class DeckChoice extends GroupAdapter {
         addActor(scissorsDis);
 
         Styles.TextButtonStyle btnStyle = new Styles.TextButtonStyle();
-        btnStyle.font = ttStyle.label.font;
+        btnStyle.font = new Font(m_Game.getAssets().get("dePixel18.ttf", BitmapFont.class));
 
         TextraButton returnBtn = new TypingButton("{WAVE}Return", btnStyle);
         addActor(returnBtn);
@@ -142,12 +125,21 @@ public class DeckChoice extends GroupAdapter {
         returnBtn.setPosition(-getX() + 10, -getY() + 10);
     }
 
+    @Override
+    public void removeFromParent() {
+        super.removeFromParent();
+
+        m_Confirmed = false;
+        m_Pressed = false;
+        m_Selected = null;
+    }
+
     public void showConfirm() {
         removeActor(m_SelectedLabel);
 
         Color color = null;
         switch (getSelectedDeck()) {
-            case ROCK -> color = Color.BLACK;
+            case ROCK -> color = Color.DARK_GRAY;
             case PAPER -> color = Color.WHITE;
             case SCISSORS -> color = Color.RED;
         }
@@ -203,7 +195,7 @@ public class DeckChoice extends GroupAdapter {
     }
 
     private void returnToTitle() {
-        m_Game.getScreenManager().pushScreen(new TitleScreen(), new SlidingInTransition(m_Game.getBatch(), SlidingDirection.UP, 0.25f, Interpolation.pow3In));
+        m_Game.getScreenManager().pushScreen(new TitleScreen(), new BlendingTransition(m_Game.getBatch(), 0.25f, Interpolation.pow3In));
     }
 
     public Card.CardType getSelectedDeck() {

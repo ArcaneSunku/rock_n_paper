@@ -8,20 +8,16 @@ import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Interpolation;
 
-import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
-import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import de.eskalon.commons.screen.ManagedScreen;
-import de.eskalon.commons.screen.transition.impl.SlidingDirection;
-import de.eskalon.commons.screen.transition.impl.SlidingInTransition;
+import de.eskalon.commons.screen.transition.impl.BlendingTransition;
 
 import dev.atomixsoft.GameMain;
-import dev.atomixsoft.game.Board;
 import dev.atomixsoft.game.Card;
 import dev.atomixsoft.game.Card.CardType;
 
-import dev.atomixsoft.game.Player;
-import dev.atomixsoft.gui.DeckChoice;
+import dev.atomixsoft.gui.GameMenu;
+import dev.atomixsoft.gui.GameMenu.GameState;
 import org.jspecify.annotations.Nullable;
 
 public class GameScreen extends ManagedScreen {
@@ -30,7 +26,7 @@ public class GameScreen extends ManagedScreen {
     private final OrthographicCamera m_Camera;
 
     private Card card;
-    private DeckChoice m_StartChoice;
+    private GameMenu m_GameMenu;
 
     public GameScreen() {
         m_Game = (GameMain) Gdx.app.getApplicationListener();
@@ -45,27 +41,16 @@ public class GameScreen extends ManagedScreen {
 
         Stage stage = m_Game.getStage();
 
-        m_StartChoice = new DeckChoice();
-        m_StartChoice.setSize(64 * 5, 96);
-        stage.addActor(m_StartChoice);
-        m_StartChoice.setPosition((m_Camera.viewportWidth - m_StartChoice.getWidth()) / 2f, (m_Camera.viewportHeight - m_StartChoice.getHeight()) / 2f);
-        m_StartChoice.update();
+        m_GameMenu = new GameMenu();
+        stage.addActor(m_GameMenu);
 
-        stage.addListener(new ClickListener() {
-            @Override
-            public void clicked(InputEvent event, float x, float y) {
-                super.clicked(event, x, y);
-
-                if(stage.getActors().contains(m_StartChoice, false))
-                    m_StartChoice.deselect();
-
-            }
-        });
+        m_GameMenu.setState(GameState.DECK_SELECT);
+        m_GameMenu.update();
     }
 
     @Override
     public void hide() {
-        m_StartChoice.removeFromParent();
+        m_GameMenu.removeFromParent();
         card = null;
     }
 
@@ -103,7 +88,7 @@ public class GameScreen extends ManagedScreen {
     }
 
     private void returnToTitle() {
-        m_Game.getScreenManager().pushScreen(new TitleScreen(), new SlidingInTransition(m_Game.getBatch(), SlidingDirection.UP, 0.25f, Interpolation.pow3In));
+        m_Game.getScreenManager().pushScreen(new TitleScreen(), new BlendingTransition(m_Game.getBatch(), 0.25f, Interpolation.pow3In));
     }
 
 }

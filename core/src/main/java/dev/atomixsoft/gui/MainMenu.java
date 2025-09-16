@@ -21,8 +21,6 @@ import dev.atomixsoft.screens.GameScreen;
 
 public class MainMenu extends GroupAdapter {
 
-    private final GameMain m_Game;
-
     private State m_MenuState;
 
     private TextraLabel title;
@@ -30,7 +28,6 @@ public class MainMenu extends GroupAdapter {
 
     public MainMenu() {
         super();
-        m_Game = (GameMain) Gdx.app.getApplicationListener();
     }
 
     @Override
@@ -146,10 +143,6 @@ public class MainMenu extends GroupAdapter {
                 // TODO: Implement settings menu
             }
         }
-    }
-
-    private void reset() {
-        clearChildren(true);
     }
 
     public void setState(State state) {
