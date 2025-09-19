@@ -3,6 +3,7 @@ package dev.atomixsoft.gui.ingame;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.math.Interpolation;
+import com.badlogic.gdx.scenes.scene2d.Group;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
@@ -11,6 +12,8 @@ import com.github.tommyettinger.textra.*;
 
 import de.eskalon.commons.screen.transition.impl.BlendingTransition;
 
+import de.eskalon.commons.screen.transition.impl.SlidingDirection;
+import de.eskalon.commons.screen.transition.impl.SlidingOutTransition;
 import dev.atomixsoft.GameMain;
 import dev.atomixsoft.game.Card;
 import dev.atomixsoft.gui.GroupAdapter;
@@ -112,6 +115,8 @@ public class DeckChoice extends GroupAdapter {
 
         TextraButton returnBtn = new TypingButton("{WAVE}Return", btnStyle);
         addActor(returnBtn);
+
+        GameMenu parent = (GameMenu) getParent();
         returnBtn.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
@@ -119,7 +124,7 @@ public class DeckChoice extends GroupAdapter {
 
                 deselect();
                 m_Pressed = true;
-                returnToTitle();
+                parent.returnToTitle();
             }
         });
 
@@ -194,10 +199,6 @@ public class DeckChoice extends GroupAdapter {
 
         m_Selected = null;
         hideConfirm();
-    }
-
-    private void returnToTitle() {
-        m_Game.getScreenManager().pushScreen(new TitleScreen(), new BlendingTransition(m_Game.getBatch(), 0.25f, Interpolation.pow3In));
     }
 
     public Card.CardType getSelectedDeck() {

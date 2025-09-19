@@ -1,10 +1,15 @@
 package dev.atomixsoft.gui.ingame;
 
 import com.badlogic.gdx.graphics.Camera;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.math.Interpolation;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
+import de.eskalon.commons.screen.transition.impl.SlidingDirection;
+import de.eskalon.commons.screen.transition.impl.SlidingOutTransition;
 import dev.atomixsoft.gui.GroupAdapter;
+import dev.atomixsoft.screens.TitleScreen;
 
 public class GameMenu extends GroupAdapter {
     private GameState m_State;
@@ -56,6 +61,10 @@ public class GameMenu extends GroupAdapter {
     protected void reset() {
         clearListeners();
         super.reset();
+    }
+
+    public void returnToTitle() {
+        m_Game.getScreenManager().pushScreen(new TitleScreen(), new SlidingOutTransition(m_Game.getBatch(), SlidingDirection.DOWN, 0.25f, Interpolation.smooth));
     }
 
     public void setState(GameState state) {

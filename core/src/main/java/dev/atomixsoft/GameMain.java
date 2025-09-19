@@ -28,7 +28,6 @@ import dev.atomixsoft.screens.TitleScreen;
 public class GameMain extends ManagedGame<ManagedScreen, ScreenTransition> {
 
     private AssetManager assets;
-    private SpriteBatch batch;
     private Stage stage;
 
     @Override
@@ -40,7 +39,6 @@ public class GameMain extends ManagedGame<ManagedScreen, ScreenTransition> {
         assets.setLoader(FreeTypeFontGenerator.class, new FreeTypeFontGeneratorLoader(resolver));
         assets.setLoader(BitmapFont.class, ".ttf", new FreetypeFontLoader(resolver));
 
-        batch = new SpriteBatch();
         stage = new Stage(new FitViewport(Gdx.graphics.getWidth(), Gdx.graphics.getHeight()));
         inputProcessor.addProcessor(stage);
 
@@ -61,7 +59,7 @@ public class GameMain extends ManagedGame<ManagedScreen, ScreenTransition> {
         GameAssets.initialize(assets);
 
         screenManager.setAutoDispose(true, true);
-        screenManager.pushScreen(new TitleScreen(), new BlendingTransition(batch, 1F, Interpolation.pow2In));
+        screenManager.pushScreen(new TitleScreen(), new BlendingTransition((SpriteBatch) stage.getBatch(), 1F, Interpolation.pow2In));
     }
 
     @Override
@@ -82,11 +80,9 @@ public class GameMain extends ManagedGame<ManagedScreen, ScreenTransition> {
     @Override
     public void dispose() {
         super.dispose();
-
         GameAssets.dispose();
-        assets.dispose();
 
-        batch.dispose();
+        assets.dispose();
         stage.dispose();
     }
 
@@ -94,12 +90,12 @@ public class GameMain extends ManagedGame<ManagedScreen, ScreenTransition> {
         return assets;
     }
 
-    public SpriteBatch getBatch() {
-        return batch;
-    }
-
     public Stage getStage() {
         return stage;
+    }
+
+    public SpriteBatch getBatch() {
+        return (SpriteBatch) stage.getBatch();
     }
 
 }

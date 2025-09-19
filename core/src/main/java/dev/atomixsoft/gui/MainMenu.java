@@ -5,6 +5,7 @@ import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Interpolation;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
@@ -74,7 +75,7 @@ public class MainMenu extends GroupAdapter {
                     @Override
                     public void clicked(InputEvent event, float x, float y) {
                         reset();
-                        screenManager.pushScreen(new GameScreen(), new SlidingInTransition(m_Game.getBatch(), SlidingDirection.DOWN, 0.25f, Interpolation.pow3In));
+                        screenManager.pushScreen(new GameScreen(), new SlidingInTransition(m_Game.getBatch(), SlidingDirection.UP, 0.25f, Interpolation.smooth));
                     }
                 });
 
